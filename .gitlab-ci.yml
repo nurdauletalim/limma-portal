@@ -1,0 +1,37 @@
+stages:
+  - build
+  - deploy
+
+build:
+  image: node:16.14
+  artifacts:
+    paths:
+      - dist/*
+  stage: build
+  script:
+    - npm install -g @angular/cli
+    - npm ci
+    - npm run ng build -- --configuration=production
+
+  tags:
+    - npm
+  only:
+    - master
+
+deploy_staging:
+  stage: deploy
+  image: kroniak/ssh-client
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - echo "${SSH_PRIVATE_KEY_PRODUCTION}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh ${PRODUCTION_HOST} rm -rf /usr/share/nginx/html/*
+    - scp -r dist/sapakz/* ${PRODUCTION_HOST}:/usr/share/nginx/html
+    - ssh ${PRODUCTION_HOST} systemctl restart nginx
+    - sleep 15
+  tags:
+    - npm
+  only:
+    - master

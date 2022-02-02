@@ -1,0 +1,326 @@
+<div class="container" *ngIf="!isGlobalLoaded">
+  <div class="row">
+    <div class="row" style="margin: 1% 0; padding: 0">
+      <div class="col-12 page__history">
+        <app-skeleton-loader [Cwidth]="'300px'" [Cheight]="20"></app-skeleton-loader>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <hr>
+  <div class="row dashboard-content">
+    <div class="col-lg-3 col-md-12">
+      <div>
+        <div class="py-3">
+          <div class="row">
+            <div class="col-9 pb-3">
+              <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+            </div>
+          </div>
+        </div>
+        <div>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+        </div>
+        <hr>
+      </div>
+
+      <div class="accordion-filter">
+        <div>
+          <div class="py-3">
+            <div class="row">
+              <div class="col-12">
+                <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="py-3">
+          <app-skeleton-loader [Cwidth]="'90%'" [Cheight]="20"></app-skeleton-loader>
+        </div>
+        <div>
+          <div>
+            <div class="py-3">
+              <div class="row">
+                <div class="col-12">
+                  <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+            <div class="py-3 form-check">
+
+              <div *ngFor="let i of arrayNumbers()">
+                <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9 col-md-12 total-offers-title">
+      <div class="row" *ngIf="!parentSubCategoryId && !childSubCategoryId">
+        <div class="col-12">
+          <app-skeleton-loader [Cwidth]="'90%'" [Cheight]="'250px'"></app-skeleton-loader>
+        </div>
+      </div>
+      <div class="row mobile-row" style="margin-top: 20px;">
+        <div class="row d-flex flex-wrap mobile-justify" *ngIf="!isLoaded">
+          <div *ngFor="let i of arrayNumbers()" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">
+            <div class="card-custom-image-block">
+              <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'200px'"
+                                   style="padding-top: 20px"></app-skeleton-loader>
+            </div>
+            <p>
+              <app-skeleton-loader [Cwidth]="'80%'" [Cheight]="'20px'"></app-skeleton-loader>
+            </p>
+            <div class="row card-custom-footer" style="margin: 0 4px; left: 0; right: 0">
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="parentCategory && isGlobalLoaded" class="container">
+  <div class="row" style="margin: 1% 0; padding: 0">
+    <div class="col-12 page__history" style="padding: 0">
+      <span style="margin: 0; padding: 0;" *ngFor="let category of tree" class="hover-link">
+        <span [routerLink]="[category.path]">{{category.name}}</span><span class="page__history__last"
+                                                                           style="margin-left: 3px"> /</span>
+      </span>
+    </div>
+  </div>
+
+  <h3 *ngIf="!childSubCategoryId">{{parentCategory.name}}</h3>
+<!--  <div *ngIf="childSubCategoryId && currentCategory">-->
+<!--    &lt;!&ndash;    <a class="nav-link">{{th}}</a>&ndash;&gt;-->
+<!--    <h3>{{currentCategory.name}}</h3>-->
+<!--  </div>-->
+
+  <hr>
+
+  <div class="row">
+    <div class="col-3">
+      <div id="accordionExample">
+        <div *ngFor="let category of parentCategory.children; let index">
+          <div class="accordion-btn need-hide" (click)="category.active  = !category.active ">
+            <div class="row">
+              <div class="col" style="position: relative;">
+                <a [routerLink]="['/dashboard/', category.id]"
+                   (click)="findTemporary(this.parentSubCategoryId, category.id)"
+                   class="children2_Txt nav-link px-0 custom-category-link"
+                   style="min-height: 56px">{{category.name}}</a>
+                <img style="width: 13px;height: 13px; position: absolute; top: 0.7rem; right: 1rem;"
+                     src="/assets/{{category.active ? 'arrow-up.png':'arrow-down.png'}}"
+                     alt="">
+              </div>
+            </div>
+          </div>
+          <div class="collapse-content {{category.active  ? 'collapse-show' : 'collapse-hide'}}">
+            <div class="card-body pt-0">
+              <a *ngFor="let childCategory of category.children"
+                 class="children3_Txt accordion-body nav-link"
+                 (click)="navigateToComponent(childCategory.id, '/dashboard/detail/')">
+                {{childCategory.name}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="parentSubCategoryId && !childSubCategoryId" class="col-md-9 col-sm-12">
+      <div *ngFor="let category of parentCategory.children;">
+        <div class="header">
+          <a class="accordion-body-detail children3_Txt nav-link"
+             [routerLink]="['/dashboard/', category.id]">
+            <p>{{category.name}}</p>
+          </a>
+        </div>
+        <div class="row categories-row">
+          <a *ngFor="let childrenCategory of category.children; let i = index"
+             class="col-xl-2 col-lg-3 col-4 catalog__item card-custom nav-link"
+             style="height: auto; text-align: center;"
+             [routerLink]="['/dashboard/detail/', childrenCategory.id]">
+            <div *ngIf="i < 4">
+              <div class="card-custom-image-block">
+                <img *ngIf="childrenCategory.name && childrenCategory.images"
+                     [src]="'data:image/JPEG;base64,' + childrenCategory.images?.data" alt="">
+
+              </div>
+              <p class="children2_Txt accordion-body">{{childrenCategory.name}}</p>
+            </div>
+          </a>
+        </div>
+        <hr>
+      </div>
+    </div>
+
+
+    <div *ngIf="childSubCategoryId && !parentSubCategoryId && childCategories" class="col-md-9 col-sm-12">
+      <div *ngFor="let category of childCategories; let i = index">
+        <div class="header">
+          <a class="accordion-body-detail children3_Txt nav-link"
+             [routerLink]="['../detail/', category.id]"> {{category.name}}</a>
+          <button [routerLink]="['../detail/', category.id]" class="btn accordion-btn-detail"
+                  style="background-color: #E7AB3C; font-size: 1rem"> Полный каталог
+          </button>
+        </div>
+        <div class="row">
+          <div *ngFor="let product of category.products"
+               class="col-xl-3 col-sm-4 col-6 catalog__item card-custom nav-link"
+               [routerLink]="['../product/detail', product.id]">
+            <div class="card-custom-image-block">
+              <img *ngIf="product.model.images && product.model.images[0] && product.model.images[0].data"
+                   [src]="'data:image/png;base64,' + product.model.images[0].data" alt="">
+              <img *ngIf="product.model.images && product.model.images.length == 0" src="/assets/no-image-1.jpg"
+                   [routerLink]="['../product/detail', product.id]">
+            </div>
+            <p class="children2_Txt accordion-body mainTxt" style="text-align: left">
+              {{product.value}}
+            </p>
+            <!--            <span style="float: left">от <b>{{showPriceWithSpace(product.products[0].price)}}</b> <sup>тг</sup></span>-->
+            <div class="row card-custom-footer">
+              <span class="float-left">
+                <b>от {{showPriceWithSpace(product.price)}}</b>
+                <sup>тнг</sup></span>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row" *ngIf="!parentCategory">
+
+    <div class="col-3 default-catalog-menu">
+      <!--    <ul aria-labelledby="dropdownMenu">-->
+      <!--      <li *ngFor="let category of sortedCategories; let j = index;" class="dropdown-item dropdown-submenu">-->
+      <!--        <div class="d-flex align-items-center">-->
+      <!--          <div style="width: 100%;" class="nav-link">-->
+      <!--            <a class="nav-link" tabindex="-1" (click)="navigateToComponent(category.id)">{{category.name}}</a>-->
+      <!--          </div>-->
+      <!--          <svg style="margin-left: 5px;" width="1em" height="1em" viewBox="0 0 16 16"-->
+      <!--               class="bi bi-chevron-right" fill="#999999"-->
+      <!--               xmlns="http://www.w3.org/2000/svg">-->
+      <!--            <path fill-rule="evenodd"-->
+      <!--                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>-->
+      <!--          </svg>-->
+      <!--        </div>-->
+
+      <!--      </li>-->
+      <!--    </ul>-->
+      <div id="default-catalog-menu">
+        <ul id="dropdown-menu" class="w-100" role="menu" aria-labelledby="dropdownMenu">
+          <li *ngFor="let category of sortedCategories; let j = index;" class="dropdown-item dropdown-submenu cursorP">
+            <div class="d-flex align-items-center">
+              <div style="width: 100%;" class="nav-link p-0">
+                <a class="nav-link p-0" tabindex="-1"
+                   (click)="navigateToComponent(category.id, '/')">{{category.name}}</a>
+              </div>
+              <svg style="margin-left: 5px;" width="1em" height="1em" viewBox="0 0 16 16"
+                   class="bi bi-chevron-right" fill="#999999"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+            <ul class="dropdown-menu small-dropdown-menu" [ngStyle]="{'top': j*-100+'%'}" style="height: 1058%">
+              <div class="d-flex flex-wrap">
+                <li *ngFor="let childCategory of category.children; let i = index"
+                    class="dropdown-item inner-dropdown-item">
+                  <div>
+                    <a class="nav-link p-0" (click)="navigateToComponent(childCategory.id, '/dashboard/')"
+                       style="font-weight: 500;">{{childCategory.name}}</a>
+
+                    <ul>
+                      <li class=" dropdown-item" style="padding: 0; font-size: 14px; border: 0"
+                          *ngFor="let childSubCategory of childCategory.children; let index = index">
+                        <a class="nav-link p-0"
+                           (click)="navigateToComponent(childSubCategory.id, '/dashboard/detail/')">{{childSubCategory.name}}</a>
+                      </li>
+<!--                      <a *ngIf="childCategory.children.length > 3" class="nav-link p-0" href=""-->
+<!--                         [routerLink]="['../dashboard/',childCategory.id]"-->
+<!--                         style="color: #4D93ED; font-size: 14px; padding: 0; margin: 0">Подробнее...</a>-->
+                    </ul>
+                  </div>
+                </li>
+              </div>
+              <br>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="col-lg-9 col-md-12">
+      <div class="row mobile-row" style="margin-top: 20px;margin-bottom: 20px; width: 100%;overflow-x: hidden">
+
+        <carousel *ngIf="promotions"
+                  [cellWidth]="'100%'"
+                  [cellsToShow]="1"
+                  [autoplay]="false"
+                  [dots]="true"
+                  [loop]="true"
+                  [arrowsTheme]="'dark'"
+                  [overflowCellsLimit]=0
+                  style="z-index: 1;"
+                  class="custom-carousel">
+          <div class="carousel-cell" *ngFor="let promotion of promotions">
+            <img *ngIf="promotion.images && promotion.images[0]"
+                 [src]="'data:image/png;base64,' + promotion.images[0].data" style="max-width: 100%;  height: initial"
+                 [alt]="promotion.title">
+          </div>
+
+
+        </carousel>
+
+      </div>
+      <h5 *ngIf="lastProducts">Новинки</h5>
+      <div class="row d-flex flex-wrap mobile-justify" *ngIf="lastProducts"
+           style="margin-top: 20px; margin-bottom: 20px">
+        <div *ngFor="let i of lastProducts"
+             class="col-xl-3 col-sm-4 col-6 catalog__item card-custom-dto">
+          <div class="card-custom-image-block">
+            <img
+              *ngIf="i.model && i.model.images && i.model.images.length!= 0 && i.model.images[0] && i.model.images[0].data"
+              [src]="'data:image/png;base64,' + i.model.images[0].data" alt=""
+              [routerLink]="['dashboard/product/detail', i.id]">
+<!--            <img-->
+<!--              *ngIf="(!i.model || (i.model && i.model.images && i.model.images.length== 0)) && i.images && i.images[0] && i.images[0].data"-->
+<!--              [src]="'data:image/png;base64,' + i.images[0].data" alt=""-->
+<!--              [routerLink]="['dashboard/product/detail', i.id]">-->
+            <img *ngIf="i.model && i.model.images && i.model.images.length== 0"
+                 src="/assets/no-image-1.jpg"
+                 [routerLink]="['dashboard/product/detail', i.id]">
+          </div>
+          <p [routerLink]="['dashboard/product/detail', i.id]">{{i.model.displayName}}</p>
+          <div class="row card-custom-footer">
+            <span class="float-left"><b>от {{showPriceWithSpace(i.price)}}</b> <sup>тнг</sup></span>
+            <!--            <img class="float-right" src="assets/notification.png" style="width: 10%;height: 5%">-->
+            <!--            <button type="button" (click)="setProductIdToApplication(i.id)" class="short-card-order long-card-btn b-btn&#45;&#45;pink"-->
+            <!--                    data-toggle="modal" data-target="#exampleModal">-->
+            <!--              <span>Заказать</span>-->
+            <!--            </button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

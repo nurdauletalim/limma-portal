@@ -1,0 +1,713 @@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 620px!important;">
+    <div class="custom-modal-content">
+      <div class="container" *ngIf="productToApply">
+
+        <div class="row d-flex justify-content-center align-items-center">
+          <div style="width: 100%" class="form d-flex justify-content-between">
+
+            <div class="image">
+              <img *ngIf="productToApply.images.length!=0"
+                   [src]="'data:image/png;base64,' + productToApply.images[0].data">
+            </div>
+            <form class="my-form" [formGroup]="applicationForm" (ngSubmit)="createApplication()">
+              <h4 class="font-weight-bold mb-3">{{productToApply.name}}, {{showPriceWithSpace(productToApply.price)}}
+                <sup>тнг</sup></h4>
+              <p class="mdb-color-text">Для того чтобы отправить заявку заполните ее.</p>
+
+              <div class="md-form md-outline custom-input">
+                <label for="name">Имя</label>
+                <input id="name" name="name" formControlName="clientName" class="form-control">
+                <span class="error" *ngIf="name.invalid && name.touched">
+                  *Имя не введено или введено неверно
+                </span>
+              </div>
+              <br>
+
+              <div class="md-form md-outline custom-input">
+                <label for="contact">Телефон номер</label>
+                <input id="contact" formControlName="clientContact" class="form-control">
+                <span class="error" *ngIf="contact.invalid && contact.touched">
+                  *Номер телефона не введено или введено неверно
+                </span>
+              </div>
+              <br>
+
+              <div class="md-form md-outline custom-input">
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" formControlName="clientEmail" class="form-control">
+                <span class="error" *ngIf="email.invalid && email.touched">
+                  *Электронная не введена или введена неверно
+                </span>
+              </div>
+              <br>
+              <div class="space">
+                <div class="float-right">
+                  <button id="btn" style=" border-radius: 50px; color: #fff;" class="btn btn-rounded" type="submit">
+                    Отправить
+                  </button>
+                </div>
+              </div>
+            </form>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!--      <div class="modal-header">-->
+      <!--        <h5 class="modal-title" id="exampleModalLabel">Подать заявку</h5>-->
+      <!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+      <!--          <span aria-hidden="true">&times;</span>-->
+      <!--        </button>-->
+      <!--      </div>-->
+
+      <!--      <div class="modal-body row" style="padding: 5%!important;">-->
+
+      <!--        <div style="max-width: 50%" *ngIf="productToApply">-->
+      <!--          <h5 style="color: #999999">{{productToApply.name}}, <span style="color: orangered">{{productToApply.price}}-->
+      <!--            тнг</span></h5>-->
+      <!--          <div style="height: 50%; width: 50%">-->
+      <!--            <img style="width: 100%" [src]="'data:image/png;base64,' + productToApply.images[0].data" alt=""-->
+      <!--                 [routerLink]="['../../product/detail', productToApply.id]">-->
+      <!--          </div>-->
+      <!--        </div>-->
+
+      <!--        <div style="max-width: 50%">-->
+      <!--          <div class="input-group mb-3">-->
+      <!--            <div class="input-group-prepend">-->
+      <!--              <span class="input-group-text" id="inputGroup-name">Name:</span>-->
+      <!--            </div>-->
+      <!--            <input type="text" class="form-control" [(ngModel)]="productApplication.name"-->
+      <!--                   aria-label="Sizing example input" aria-describedby="inputGroup-name">-->
+      <!--          </div>-->
+
+      <!--          <div class="input-group mb-3">-->
+      <!--            <div class="input-group-prepend">-->
+      <!--              <span class="input-group-text" id="inputGroup-Contact">Contact:</span>-->
+      <!--            </div>-->
+      <!--            <input type="text" class="form-control" [(ngModel)]="productApplication.contact"-->
+      <!--                   aria-label="Sizing example input" aria-describedby="inputGroup-Contact">-->
+      <!--          </div>-->
+
+      <!--          <div class="input-group mb-3">-->
+      <!--            <div class="input-group-prepend">-->
+      <!--              <span class="input-group-text" id="inputGroup-Email">Email:</span>-->
+      <!--            </div>-->
+      <!--            <input type="text" class="form-control" [(ngModel)]="productApplication.email"-->
+      <!--                   aria-label="Sizing example input" aria-describedby="inputGroup-Contact">-->
+      <!--          </div>-->
+      <!--        </div>-->
+
+      <!--      </div>-->
+      <!--      <div class="modal-footer">-->
+      <!--        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>-->
+      <!--        <button type="button" (click)="createApplication()" data-dismiss="modal" class="btn btn-primary">Отправить заявку-->
+      <!--        </button>-->
+      <!--      </div>-->
+    </div>
+  </div>
+</div>
+
+
+<div class="container" *ngIf="!isGlobalLoaded">
+  <div class="row">
+    <div class="row" style="margin: 1% 0; padding: 0">
+      <div class="col-12 page__history">
+        <app-skeleton-loader [Cwidth]="'300px'" [Cheight]="20"></app-skeleton-loader>
+      </div>
+    </div>
+  </div>
+  <br>
+  <h3>
+    <app-skeleton-loader [Cwidth]="'200px'" [Cheight]="'34px'"></app-skeleton-loader>
+  </h3>
+
+  <hr>
+  <div class="row dashboard-content">
+    <div class="col-lg-3 col-md-12">
+      <div>
+        <div class="py-3">
+          <div class="row">
+            <div class="col-9 pb-3">
+              <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+            </div>
+          </div>
+        </div>
+        <div>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+          <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+        </div>
+        <hr>
+      </div>
+
+      <button class="btn accordion-filter-btn">Фильтры</button>
+
+      <div class="accordion-filter">
+        <button class="btn accordion-filter-btn filter-btn-close">Закрыть</button>
+        <div>
+          <div class="py-3">
+            <div class="row">
+              <div class="col-12">
+                <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="py-3">
+          <app-skeleton-loader [Cwidth]="'90%'" [Cheight]="20"></app-skeleton-loader>
+        </div>
+        <div>
+          <div>
+            <div class="py-3">
+              <div class="row">
+                <div class="col-12">
+                  <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+            <div class="py-3 form-check">
+              <div *ngFor="let i of arrayNumbers()">
+                <app-skeleton-loader [Cwidth]="'70%'" [Cheight]="20"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-9 col-md-12 total-offers-title">
+
+      <div class="row mobile-row" style="margin-top: 20px;">
+        <div class="row d-flex flex-wrap mobile-justify" *ngIf="!isLoaded">
+          <div *ngFor="let i of arrayNumbers()" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">
+            <div class="card-custom-image-block">
+              <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'200px'"
+                                   style="padding-top: 20px"></app-skeleton-loader>
+            </div>
+            <p>
+              <app-skeleton-loader [Cwidth]="'80%'" [Cheight]="'20px'"></app-skeleton-loader>
+            </p>
+            <div class="row card-custom-footer" style="margin: 0 4px; left: 0; right: 0">
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>
+
+
+<div class="container" *ngIf="isGlobalLoaded">
+  <div class="row">
+    <div class="row" style="margin: 1% 0; padding: 0">
+      <div class="col-12 page__history">
+      <span style="margin: 0; padding: 0;" *ngFor="let category of tree" class="hover-link">
+        <span [routerLink]="[category.path]">{{category.name}}</span><span class="page__history__last"
+                                                                           style="margin-left: 3px"> /</span>
+      </span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <h3>{{currentCategory.name}}</h3>
+
+  <hr>
+  <div class="row dashboard-content">
+    <div class="col-lg-3 col-md-12">
+      <div id="accordionExample">
+        <div class="accordion-btn">
+          <div class="row">
+            <div class="col-9">
+              Категории
+            </div>
+          </div>
+        </div>
+        <div class="card-body-custom">
+          <p *ngFor="let category of tree; let i = index;" class="accordion-body hover-link">
+            <img [ngClass]="{'lastHidden': i== (tree.length-1)}" src="/assets/arrow-back.png" alt="">
+            <a [routerLink]="[category.path]" [ngClass]="{'last': i== (tree.length-1)}"
+               [style]="i != (tree.length-1) ?'color: #000000':''"
+               class="text-decoration-none">{{category.name}}</a>
+          </p>
+        </div>
+        <hr>
+      </div>
+      <!--      <button class="btn mobile-filter-btn" type="button" data-toggle="collapse" data-target="#accordion" aria-expanded="false" aria-controls="accordion">-->
+      <!--        Filter-->
+      <!--      </button>-->
+      <!--      <div class="collapse" id="accordion">-->
+      <button class="btn accordion-filter-btn" (click)="this.mobileFilterOpen = !this.mobileFilterOpen">Фильтры</button>
+      <div id="accordion" class="accordion-filter" [ngClass]="mobileFilterOpen ? 'open-filter' : 'close-filter'">
+        <button class="btn accordion-filter-btn filter-btn-close"
+                (click)="this.mobileFilterOpen = !this.mobileFilterOpen">Закрыть
+        </button>
+        <div>
+          <div class="accordion-btn" (click)="active = !active">
+            <div class="row">
+              <div class="col-10 col-lg-9" style="font-size: 16px; font-weight: 500">
+                Цены
+              </div>
+              <div class="col-1 col-lg-3 ">
+                <img style="width: 13px;height: 13px"
+                     src="/assets/{{!active ? 'arrow-up.png':'arrow-down.png'}}"
+                     alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="properties {{!active  ? 'show' : 'hide'}}" id="price">
+          <form>
+            <label for="value">от</label><br>
+            <input type="number" id="value" name = "value" [(ngModel)]="value" style="width:190px"/><br>
+            <label for="highValue">до</label><br>
+            <input type="number" id="highValue" name = "highValue" [(ngModel)]="highValue" style="width:190px"/><br><br>
+            <ng5-slider [(value)]="value" [options]="options"
+                        [(highValue)]="highValue"></ng5-slider>
+            <button class="btn float-left mr-2"
+                    style="color: white;background-color: #E7AB3C; font-size: 1rem" (click)="addToFilteredProducts()">
+              Найти
+            </button>
+          </form>
+          <br><br>
+        </div>
+        <div *ngFor="let filter of filters">
+          <div *ngIf="filter && filter.data">
+            <div class="accordion-btn" (click)="filter.active = !filter.active">
+              <div class="row" data-toggle="collapse" [attr.data-target]="'#' + filter.key" aria-expanded="true"
+                   aria-controls="collapseOne">
+                <div class="col-10 col-lg-9" style="font-size: 16px; font-weight: 500">
+                  <!--                  {{filtersToDisplay[filter.key]}}*-->
+                  {{filter.displayName}}
+                </div>
+                <div class="col-1 col-lg-3">
+                  <img style="width: 13px;height: 13px"
+                       src="/assets/{{filter.active ? 'arrow-up.png':'arrow-down.png'}}"
+                       alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+          <div class="properties {{filter.active  ? 'show' : 'hide'}}">
+            <div><input
+              *ngIf="filter.displayName==='Модель'"
+              type="text"
+              style="border: 1px solid rgba(60, 60, 40, 0.6);padding: 5px 10px;border-radius: 3px;width: 90%;height: 30px"
+              class="search"
+              placeholder="Название модели"
+              (keyup)="updateSearchTerm(searchTerm.value)"
+              #searchTerm
+            /></div>
+            <div *ngFor="let i of filter.data; let y = index;">
+              <input *ngIf="filter.displayName==='Модель' && y < (5+hideCount) && i.checked && !i.hide"
+                     [defaultChecked]="i.checked" class="form-check-input test"
+                     type="checkbox" (change)="addToFilteredProducts(i.displayName, filter.key, i.id)">
+              <input *ngIf="filter.displayName==='Модель' && y < (5+hideCount) && i && !i.checked && !i.hide"
+                     [defaultChecked]="false" class="form-check-input"
+                     type="checkbox" (change)="addToFilteredProducts(i.displayName, filter.key, i.id)">
+              <label *ngIf="filter.displayName==='Модель' && y < (5+hideCount) && !i.hide"
+                     class="form-check-label">{{i.displayName}}
+                <!--                <small style="color: #999">&nbsp;({{i.count}})</small>-->
+              </label>
+              <ng-container *ngIf="filter.displayName==='Модель' && i && i.hide">{{increaseHideCount()}}</ng-container>
+              <input *ngIf="filter.displayName!=='Модель' && i.checked && !i.hide" [defaultChecked]="i.checked"
+                     class="form-check-input test"
+                     type="checkbox" (change)="addToFilteredProducts(i.displayName, filter.key, i.id)">
+              <input *ngIf="filter.displayName!=='Модель' && i && !i.checked && !i.hide" [defaultChecked]="false"
+                     class="form-check-input"
+                     type="checkbox" (change)="addToFilteredProducts(i.displayName, filter.key, i.id)">
+              <label *ngIf="filter.displayName!=='Модель' && !i.hide" class="form-check-label">{{i.displayName}}
+                <!--                <small style="color: #999">&nbsp;({{i.count}})</small>-->
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9 col-md-12 total-offers-title">
+      <h5 *ngIf="pageableProducts.content.length === 0">Ничего не найдено</h5>
+      <!--      <small *ngIf="!isEmpty()">ВСЕГО {{filteredProductsToDisplay.length}} ПРЕДЛОЖЕНИЙ</small>-->
+
+      <div class="row mobile-row" style="margin-top: 20px;">
+
+        <!--******************************************************************WITHOUT FILTERS**************************************************************-->
+        <div class="row d-flex flex-wrap mobile-justify" *ngIf="pageableProducts && isLoaded">
+          <div *ngFor="let i of pageableProducts.content"
+               class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">
+            <div class="card-custom-image-block">
+              <!--              <img *ngIf="currentProduct.model.images && currentProduct.model.images.length != 0"-->
+              <!--                   [src]="'data:image/png;base64,' + currentProduct.model.images[0].data" alt="" height="100%">-->
+              <!--              <img *ngIf="currentProduct.model.images && currentProduct.model.images.length == 0-->
+              <!--        && currentProduct.images && currentProduct.images.length!=0"-->
+              <!--                   [src]="'data:image/png;base64,' + currentProduct.images[0].data" alt="" height="100%">-->
+              <!--              <img *ngIf="currentProduct.images && currentProduct.images.length == 0" src="/assets/no-image-1.jpg" alt="" height="100%">-->
+
+              <img
+                *ngIf="i.model && i.model.images && i.model.images.length!= 0 && i.model.images[0] && i.model.images[0].data"
+                [src]="'data:image/png;base64,' + i.model.images[0].data" alt=""
+                [routerLink]="['../../product/detail', i.id]" height="100%">
+<!--              <img-->
+<!--                *ngIf="(!i.model || (i.model && i.model.images && i.model.images.length== 0)) && i.images && i.images[0] && i.images[0].data"-->
+<!--                [src]="'data:image/png;base64,' + i.images[0].data" alt=""-->
+<!--                [routerLink]="['../../product/detail', i.id]" height="100%">-->
+              <img *ngIf="i.model && i.model.images && i.model.images.length== 0"
+                   src="/assets/no-image-1.jpg"
+                   [routerLink]="['../../product/detail', i.id]" height="100%">
+            </div>
+            <!--            <p *ngIf="i.model!== null && !i.capacity" [routerLink]="['../../product/detail', i.id]">{{i.model.displayName}}</p>-->
+            <!--            <p *ngIf="i.model!== null && i.capacity!=null" [routerLink]="['../../product/detail', i.id]">{{i.model.displayName}}/{{i.capacity}}</p>-->
+            <p [routerLink]="['../../product/detail', i.id]">{{i.model.displayName}}</p>
+            <div class="row card-custom-footer">
+              <span class="float-left">
+                <b>от {{showPriceWithSpace(i.price)}}</b>
+                <sup>тнг</sup></span>
+            </div>
+          </div>
+        </div>
+
+        <!--Loader-->
+        <div class="row d-flex flex-wrap mobile-justify" *ngIf="!isLoaded">
+          <div *ngFor="let i of arrayNumbers()" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">
+            <div class="card-custom-image-block">
+              <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'200px'"
+                                   style="padding-top: 20px"></app-skeleton-loader>
+            </div>
+            <p>
+              <app-skeleton-loader [Cwidth]="'80%'" [Cheight]="'20px'"></app-skeleton-loader>
+            </p>
+            <div class="row card-custom-footer" style="margin: 0 4px; left: 0; right: 0">
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+              <div class="col-6">
+                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!--        <div *ngIf="!isEmpty() && isLoaded">-->
+        <!--          <div class="row d-flex flex-wrap">-->
+        <!--            <div *ngFor="let i of filteredProductsToDisplay" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+        <!--              <img *ngIf="i.images && i.images[0] && i.images[0].data" [src]="'data:image/png;base64,' + i.images[0].data" alt="" [routerLink]="['../../product/detail', i.id]">-->
+        <!--              <img *ngIf="i.images && i.images.length == 0" src="/assets/no-image-1.jpg" [routerLink]="['../../product/detail', i.id]">-->
+        <!--              <p [routerLink]="['../../product/detail', i.id]">{{i.name}}</p>-->
+        <!--              <div class="row card-custom-footer">-->
+        <!--                <span class="float-left"><b>{{i.price}}</b> <sup>тнг</sup></span>-->
+        <!--                &lt;!&ndash;            <img class="float-right" src="assets/notification.png" style="width: 10%;height: 5%">&ndash;&gt;-->
+        <!--                <button type="button" (click)="setProductIdToApplication(i.id)" class="btn btn-success float-right"-->
+        <!--                        data-toggle="modal" data-target="#exampleModal">-->
+        <!--                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+        <!--                    <path fill-rule="evenodd" d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>-->
+        <!--                  </svg>-->
+        <!--                </button>-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+      </div>
+      <hr>
+      <br>
+
+      <nav aria-label="Статьи по Bootstrap 4"
+           *ngIf="pageableProducts && pageableProducts.content && pageableProducts.content.length > 0">
+        <ul class="pagination justify-content-center">
+          <li style="cursor: pointer" class="page-item small-page-item" (click)="prevPage()"><a
+            class="page-link"><</a></li>
+          <li style="cursor: pointer" class="page-item" *ngFor="let i of getIndex(); let index=index"
+              (click)="page = index;getProductsByCategoryId()">
+            <a *ngIf="index<7" class="page-link">{{index + 1}}</a>
+          </li>
+          <li style="cursor: pointer" class="page-item small-page-item" (click)="nextPage()"><a
+            class="page-link">></a></li>
+        </ul>
+      </nav>
+      <!--      <pagination-controls (pageChange)="pageChanged($event)"-->
+      <!--                           autoHide="true"-->
+      <!--                           responsive="true"></pagination-controls>-->
+
+    </div>
+
+    <div class="col-lg-3 col-md-12"></div>
+    <div class="col-lg-9 col-md-12 total-offers-title" style="padding-top: 100px; width: 100%;margin-bottom: 50px"
+         *ngIf="lastFourProducts.length > 0">
+      <h4 style="font-size: 23px;padding: 10px 20px;"><b>Последние опубликованные товары</b></h4>
+      <div class="row mobile-row">
+        <a style="color: black; text-decoration-line: none" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom"
+           *ngFor="let product of lastFourProducts"
+           [routerLink]="['../../product/detail', product.id]">
+          <img
+            *ngIf="product.model && product.model.images && product.model.images.length!= 0 && product.model.images[0] && product.model.images[0].data"
+            [src]="'data:image/png;base64,' + product.model.images[0].data" alt=""
+            [routerLink]="['../../product/detail', product.id]" height="100%">
+<!--          <img-->
+<!--            *ngIf="(!product.model || (product.model && product.model.images && product.model.images.length== 0)) && product.images && product.images[0] && product.images[0].data"-->
+<!--            [src]="'data:image/png;base64,' + product.images[0].data" alt=""-->
+<!--            [routerLink]="['../../product/detail', product.id]" height="100%">-->
+          <img *ngIf="product.model && product.model.images && product.model.images.length== 0"
+               src="/assets/no-image-1.jpg"
+               [routerLink]="['../../product/detail', product.id]" height="100%">
+          <p>{{product.value}}</p>
+          <span
+            style="position: absolute; bottom: 50px; left: 20px;"><b>от {{showPriceWithSpace(product.price)}}</b> <sup>тг</sup></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--<app-skeleton-loader [Cwidth]="100" [Cheight]="50"></app-skeleton-loader>-->
+
+
+<!--<div class="container" *ngIf="!isGlobalLoaded">-->
+<!--  <div class="row">-->
+<!--    <div class="row" style="margin: 1% 0; padding: 0">-->
+<!--      <div class="col-12">-->
+<!--        <app-skeleton-loader [Cwidth]="'400px'" [Cheight]="20"></app-skeleton-loader>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <br>-->
+<!--  <h3><app-skeleton-loader [Cwidth]="'50%'" [Cheight]="20"></app-skeleton-loader></h3>-->
+
+<!--  <hr>-->
+<!--  <div class="row dashboard-content">-->
+<!--    <div class="col-lg-3 col-md-12">-->
+<!--      <div id="accordionExample">-->
+<!--        <div class="accordion-btn">-->
+<!--          <div class="row">-->
+<!--            <div class="col-9">-->
+<!--              Категории-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="card-body-custom">-->
+<!--          <p *ngFor="let category of tree; let i = index;" class="accordion-body hover-link">-->
+<!--            <img [ngClass]="{'lastHidden': i== (tree.length-1)}" src="/assets/arrow-back.png" alt="">-->
+<!--            <a [routerLink]="[category.path]" [ngClass]="{'last': i== (tree.length-1)}"-->
+<!--               class="text-decoration-none">{{category.name}}</a>-->
+<!--          </p>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--      </div>-->
+<!--      &lt;!&ndash;      <button class="btn mobile-filter-btn" type="button" data-toggle="collapse" data-target="#accordion" aria-expanded="false" aria-controls="accordion">&ndash;&gt;-->
+<!--      &lt;!&ndash;        Filter&ndash;&gt;-->
+<!--      &lt;!&ndash;      </button>&ndash;&gt;-->
+
+<!--      &lt;!&ndash;      <div class="collapse" id="accordion">&ndash;&gt;-->
+<!--      <button class="btn accordion-filter-btn" (click)="accordionFilterOpen()">Filter</button>-->
+<!--      <div id="accordion" class="accordion-filter">-->
+<!--        <button class="btn accordion-filter-btn filter-btn-close" (click)="accordionFilterClose()">Close</button>-->
+<!--        <div id="headingOne">-->
+<!--          <div class="accordion-btn" (click)="active = !active">-->
+<!--            <div class="row" data-toggle="collapse" data-target="#price" aria-expanded="true"-->
+<!--                 aria-controls="collapseOne">-->
+<!--              <div class="col-10 col-lg-9">-->
+<!--                Цены-->
+<!--              </div>-->
+<!--              <div class="col-1 col-lg-3">-->
+<!--                <img style="width: 13px;height: 13px"-->
+<!--                     src="/assets/{{active ? 'arrow-up.png':'arrow-down.png'}}"-->
+<!--                     alt="">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        <div  class="price" id="price">-->
+<!--          <form>-->
+<!--            <ng5-slider (userChange)="addToFilteredProducts()" [(value)]="value" [options]="options"-->
+<!--                        [(highValue)]="highValue"></ng5-slider>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--        <div  *ngFor="let filter of filters | keyvalue">-->
+<!--          <div id="headingOne">-->
+<!--            <div class="accordion-btn" (click)="active = !active">-->
+<!--              <div class="row" data-toggle="collapse" [attr.data-target]="'#' + filter.key" aria-expanded="true"-->
+<!--                   aria-controls="collapseOne">-->
+<!--                <div class="col-10 col-lg-9" style="font-size: 16px; font-weight: 500">-->
+<!--                  {{filter.key}}-->
+<!--                </div>-->
+<!--                <div class="col-1 col-lg-3">-->
+<!--                  <img style="width: 13px;height: 13px"-->
+<!--                       src="/assets/{{active ? 'arrow-up.png':'arrow-down.png'}}"-->
+<!--                       alt="">-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <hr>-->
+
+<!--          <div [id]="filter.key" class="collapse show form-check" aria-labelledby="headingOne" data-parent="#accordion">-->
+<!--            <div *ngFor="let i of filter.value">-->
+<!--              <input [defaultChecked]="false" class="form-check-input"-->
+<!--                     type="checkbox" (change)="addToFilteredProducts(i.value, filter.key)">-->
+<!--              <label class="form-check-label">{{i.displayName}}-->
+<!--                <small style="color: #999">&nbsp;(100)</small>-->
+<!--              </label>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="col-lg-9 col-md-12 total-offers-title">-->
+<!--      <small *ngIf="isEmpty()">ВСЕГО {{allProducts.length}} ПРЕДЛОЖЕНИЙ</small>-->
+<!--      <small *ngIf="!isEmpty()">ВСЕГО {{filteredProductsToDisplay.length}} ПРЕДЛОЖЕНИЙ</small>-->
+
+<!--      <div class="row mobile-row" style="margin-top: 20px;">-->
+<!--        <div class="row d-flex flex-wrap mobile-justify" *ngIf="isEmpty() && isLoaded">-->
+<!--          <div *ngFor="let i of allProducts" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--            <div class="card-custom-image-block">-->
+<!--              &lt;!&ndash;              <app-skeleton-loader *ngIf="isLoaded" [Cwidth]="'180px'" [Cheight]="'200px'"></app-skeleton-loader>&ndash;&gt;-->
+<!--              <img *ngIf="i.images && i.images[0] && i.images[0].data" [src]="'data:image/png;base64,' + i.images[0].data" alt="" [routerLink]="['../../product/detail', i.id]">-->
+<!--              <img *ngIf="i.images && i.images.length == 0" src="/assets/no-image-1.jpg" [routerLink]="['../../product/detail', i.id]">-->
+<!--            </div>-->
+<!--            <p [routerLink]="['../../product/detail', i.id]">{{i.name}}</p>-->
+<!--            <div class="row card-custom-footer">-->
+<!--              <span class="float-left"><b>{{i.price}}</b> <sup>тнг</sup></span>-->
+<!--              &lt;!&ndash;            <img class="float-right" src="assets/notification.png" style="width: 10%;height: 5%">&ndash;&gt;-->
+<!--              <button type="button" (click)="setProductIdToApplication(i.id)" class="btn btn-success float-right"-->
+<!--                      data-toggle="modal" data-target="#exampleModal">-->
+<!--                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+<!--                  <path fill-rule="evenodd" d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>-->
+<!--                </svg>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash;Loader&ndash;&gt;-->
+<!--        <div class="row d-flex flex-wrap mobile-justify" *ngIf="!isLoaded">-->
+<!--          <div *ngFor="let i of allProducts" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--            <div class="card-custom-image-block">-->
+<!--              <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'200px'" style="padding-top: 20px"></app-skeleton-loader>-->
+<!--            </div>-->
+<!--            <p [routerLink]="['../../product/detail', i.id]">-->
+<!--              <app-skeleton-loader [Cwidth]="'80%'" [Cheight]="'20px'"></app-skeleton-loader>-->
+<!--            </p>-->
+<!--            <div class="row justify-content-between align-items-center" style="margin-top: 40px">-->
+<!--              <div class="col-6">-->
+<!--                <app-skeleton-loader [Cwidth]="'100%'" [Cheight]="'25px'"></app-skeleton-loader>-->
+<!--              </div>-->
+<!--              <div class="col-4">-->
+<!--                <app-skeleton-loader [Cwidth]="'42px'" [Cheight]="'35px'"></app-skeleton-loader>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+
+<!--        <div *ngIf="!isEmpty() && isLoaded">-->
+<!--          <div class="row d-flex flex-wrap">-->
+<!--            <div *ngFor="let i of filteredProductsToDisplay" class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--              <img *ngIf="i.images && i.images[0] && i.images[0].data" [src]="'data:image/png;base64,' + i.images[0].data" alt="" [routerLink]="['../../product/detail', i.id]">-->
+<!--              <img *ngIf="i.images && i.images.length == 0" src="/assets/no-image-1.jpg" [routerLink]="['../../product/detail', i.id]">-->
+<!--              <p [routerLink]="['../../product/detail', i.id]">{{i.name}}</p>-->
+<!--              <div class="row card-custom-footer">-->
+<!--                <span class="float-left"><b>{{i.price}}</b> <sup>тнг</sup></span>-->
+<!--                &lt;!&ndash;            <img class="float-right" src="assets/notification.png" style="width: 10%;height: 5%">&ndash;&gt;-->
+<!--                <button type="button" (click)="setProductIdToApplication(i.id)" class="btn btn-success float-right"-->
+<!--                        data-toggle="modal" data-target="#exampleModal">-->
+<!--                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+<!--                    <path fill-rule="evenodd" d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>-->
+<!--                  </svg>-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <hr>-->
+
+<!--      <nav aria-label="Статьи по Bootstrap 4">-->
+<!--        <ul class="pagination justify-content-center">-->
+<!--          <li class="page-item small-page-item"><a class="page-link" href="#">Предыдущая</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--          <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--          <li class="page-item small-page-item"><a class="page-link" href="#">Следующая</a></li>-->
+<!--        </ul>-->
+<!--      </nav>-->
+<!--    </div>-->
+
+<!--    <div style="padding-top: 100px">-->
+<!--      <h4 style="font-size: 23px;padding: 10px 20px;"><b>Последние опубликованные товары</b></h4>-->
+<!--      <div class="row mobile-row">-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/nomi.webp" alt="">-->
+<!--          <p> Apple iPhone XS Max 64Gb Gold (MT522)</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>299 990</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/iphone.webp" alt="">-->
+<!--          <p>Xiaomi Redmi Note 7 4/64GB Space Black</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>120 000</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/nomi.webp" alt="">-->
+<!--          <p>Xiaomi Redmi Note 7 4/64GB Space Black</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>90 000</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/iphone.webp" alt="">-->
+<!--          <p>Xiaomi Redmi Note 7 4/64GB Space Black</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>110 000</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <h4 style="font-size: 23px;padding: 100px 20px 10px;"><b>Просмотренные товары</b></h4>-->
+<!--      <div class="row mobile-row" style="padding-bottom: 50px">-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/iphone.webp" alt="">-->
+<!--          <p> Apple iPhone XS Max 64Gb Gold (MT522)</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>313 990</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-sm-4 col-6 catalog__item card-custom">-->
+<!--          <img src="/assets/iphone.webp" alt="">-->
+<!--          <p>Xiaomi Redmi Note 7 4/64GB Space Black</p>-->
+<!--          <span style="position: absolute; bottom: 50px; left: 20px;">от <b>119 990</b> <sup>тг</sup></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <hr>-->
+<!--  <h4 style="font-size: 23px;margin-top: 150px;margin-bottom: 20px">-->
+<!--    <b>Цены на б/у: Мобильные телефоны</b>-->
+<!--  </h4>-->
+<!--  <p class="footer-card">Huawei P20 6/64GB (EML-AL00) Twilight Purple-->
+<!--    <span class="footer-card-price">от 91 990 тг</span>-->
+<!--  </p>-->
+<!--  <hr>-->
+<!--  <p class="footer-card">Huawei P20 6/64GB (EML-AL00) Twilight Purple-->
+<!--    <span class="footer-card-price">от 89 990 тг</span>-->
+<!--  </p>-->
+<!--  <hr>-->
+<!--  <p class="footer-card">Huawei P20 4/64GB (EML-L29)-->
+<!--    <span class="footer-card-price"> от 82 990 тг</span>-->
+<!--  </p>-->
+<!--  <hr>-->
+<!--  <p class="footer-card">Apple iPhone 6 16Gb Space Gray (MG472)-->
+<!--    <span class="footer-card-price"> от 152 990 тг</span>-->
+<!--  </p>-->
+<!--  <hr>-->
+<!--  <p class="footer-card">Samsung Galaxy J3 2016 Gold (SM-J320HZDD) 1/8Gb-->
+<!--    <span class="footer-card-price"> от 45 990 тг</span>-->
+<!--  </p>-->
+<!--  <hr>-->
+<!--</div>-->

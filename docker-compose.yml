@@ -1,0 +1,8 @@
+version: '2.2'
+
+services:
+  web:
+    image: git.reself.kz:5050/sapakz/sapakz
+    ports:
+      - "80:80"
+      - '443:443'

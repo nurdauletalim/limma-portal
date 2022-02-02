@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row dashboard-content">
+
+    <div class="row">
+      <div class="row" style="margin: 1% 0; padding: 0">
+        <div class="col-12 page__history">
+      <span style="margin: 0; padding: 0;" class="hover-link">
+        <span [routerLink]="'/'">Главная страница</span><span class="page__history__last"
+                                                              style="margin-left: 3px"> /</span>
+        </span>
+          <span style="margin: 0; padding: 0;" class="hover-link">
+        <span [routerLink]="'/p/promotions'">Акции</span><span class="page__history__last"
+                                                              style="margin-left: 3px"> /</span>
+        </span>
+          <span style="margin: 0; padding: 0;" class="hover-link">
+        <span *ngIf="promotion" [routerLink]="'/p/promotions'">{{promotion.title}}</span><span class="page__history__last"
+                                                              style="margin-left: 3px"> /</span>
+      </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12  col-md-12 total-offers-title">
+      <h2 *ngIf="promotion">{{promotion.title}}</h2>
+      <b>{{promotion.publishedDate|date:'dd.MM.yyyy'}} - {{promotion.expirationDate|date:'dd.MM.yyyy'}}</b>
+      <div class="row mobile-row" style="margin-top: 20px;">
+
+        <div *ngIf="promotion" class="col-xl-10 col-sm-10 col-5 catalog__item card-custom">
+          <div class="card-custom-image-block">
+            <img *ngIf="promotion.images && promotion.images[0] && promotion.images[0].data"
+                 [src]="'data:image/png;base64,' + promotion.images[0].data" alt=""
+                 height="100%">
+            <img *ngIf="promotion.images && promotion.images.length == 0" src="/assets/no-image-1.jpg"
+                 height="100%">
+          </div>
+          <div class="row card-custom-footer">
+              <span>
+                <p>{{promotion.description}}</p>
+              </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

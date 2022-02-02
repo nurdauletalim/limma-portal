@@ -1,0 +1,268 @@
+<div class="header">
+  <div class="row" style="height: 50px">
+    <div class="col">
+    </div>
+    <div class="col" style="height: 100%">
+      <img class="logo" src="/assets/limma.png" [routerLink]="['']">
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+<div class="header-filter">
+  <div class="container content-center">
+    <div class="row justify-content-start" style="max-width: 100%">
+      <div class="col-2 col-lg-3 col-md-4 mobile-menu-list">
+        <div class="btn-group dropdown" style="width: 100%">
+          <button (click)="mobileMenuOpen()" type="button" class="btn dropdown-toggle col" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="color: white; border:  3px solid; cursor: pointer;">
+            <span class="btn-default-text">КАТАЛОГ ТОВАРОВ</span>
+            <span class="btn-mini-icon">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </span>
+          </button>
+          <!--          <button (click)="mobileMenuOpen()"-->
+          <!--                  style="color: white; border:  3px solid; cursor: pointer;">-->
+          <!--            <span class="btn-default-text">КАТАЛОГ ТОВАРОВ</span>-->
+          <!--            <span class="btn-mini-icon">-->
+          <!--              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+          <!--                <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>-->
+          <!--              </svg>-->
+          <!--            </span>-->
+          <!--          </button>-->
+
+
+          <!--          <div id="mobile-menu" class="mobile-menu">-->
+          <!--            <button class="btn mobile-menu-btn" (click)="mobileMenuClose()">Close</button>-->
+          <!--            <ul class="mobile-menu-list">-->
+          <!--              <li *ngFor="let category of sortedCategories; let j = index;" class="mobile-menu-list-item">-->
+          <!--                <div class="d-flex align-items-center">-->
+          <!--                  <div style="width: 100%;" class="nav-link">-->
+          <!--                    <a class="nav-link" tabindex="-1" href="#">{{category.name}}</a>-->
+          <!--                  </div>-->
+          <!--                  <svg style="margin-left: 5px;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-right" fill="#999999"-->
+          <!--                       xmlns="http://www.w3.org/2000/svg">-->
+          <!--                    <path fill-rule="evenodd"-->
+          <!--                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>-->
+          <!--                  </svg>-->
+          <!--                </div>-->
+          <!--                <ul class="mobile-menu-sublist"  [ngStyle]="{'top': j*-1*100+'%'}">-->
+          <!--                  <div class="d-flex flex-wrap">-->
+          <!--                    <li *ngFor="let childCategory of category.children; let i = index"-->
+          <!--                        class="mobile-menu-sublist-item">-->
+          <!--                      <div>-->
+          <!--                        <a class="nav-link" href="#" style="font-weight: 500;">{{childCategory.name}}</a>-->
+
+          <!--                        <ul>-->
+          <!--                          <li class="mobile-menu-sublist-item" style="padding: 0; font-size: 14px; border: 0"-->
+          <!--                              *ngFor="let childSubCategory of childCategory.children; let index = index">-->
+          <!--                            <a *ngIf="index < 3" class="nav-link" href="">{{childSubCategory.name}}</a>-->
+          <!--                          </li>-->
+          <!--                          <a *ngIf="childCategory.children.length > 3" class="nav-link" href=""-->
+          <!--                             style="color: #4D93ED; font-size: 14px; padding: 0; margin: 0">More...</a>-->
+          <!--                        </ul>-->
+          <!--                      </div>-->
+          <!--                    </li>-->
+          <!--                  </div>-->
+          <!--                  <br>-->
+          <!--                </ul>-->
+          <!--              </li>-->
+          <!--            </ul>-->
+          <!--          </div>-->
+
+          <div id="mobile-catalog-menu" class="mobile-menu">
+            <div class="catalog-menu-header">
+              <div class="catalog-menu-list">
+                <a class="catalog-menu-logo" href="#">
+                  <img class="logo" src="/assets/limma.png" [routerLink]="['']" (click)="mobileMenuClose()">
+                </a>
+                <button class="btn float-right"
+                        data-toggle="modal" data-target="#statusModal" style="color: white;background-color: #E7AB3C">
+                  Статус заказа
+                </button>
+              </div>
+            </div>
+
+            <div style="display: flex">
+              <div style="width: 100%; height: 100%; overflow-x: hidden" class="slider-card" [ngClass]="{'move-left': test}" id="mobile-catalogs">
+                <ul class="mobile-catalogs-list">
+                <li *ngFor="let category of sortedCategories" (click)="nextShow(category)" class="mobile-catalogs-item">
+                  <div class="d-flex align-items-center">
+                    <div style="width: 100%;" class="mobile-catalogs-item-link">
+                      <span (click)="navigateToComponent(category.id)">{{category.name}}</span>
+                    </div>
+                    <svg style="margin-left: 5px; position: relative;" width="1em" height="1em" viewBox="0 0 16 16"
+                         class="bi bi-chevron-right" fill="#999999"
+                         xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  </div>
+                </li>
+              </ul>
+              </div>
+              <div style="padding: 5% 4%; height: 100%; width: 100%;" class="slider-card" [ngClass]="{'displaySettings2': !test}" *ngIf="globalCategory">
+                <p style="cursor: pointer; font-weight: 500; font-size: 18px; color: #E7AB3C;" (click)="prevShow()">{{globalCategory.name}}</p>
+                <ul class="mobile-catalogs-list">
+                  <li *ngFor="let category of globalCategory.children" (click)="nextShow(category)" class="mobile-catalogs-item">
+                    <div class="d-flex align-items-center">
+                      <div style="width: 100%;" class="mobile-catalogs-item-link">
+                        <span *ngIf="category.children" (click)="navigateToComponentDashboard(category.id)">{{category.name}}</span>
+                        <span *ngIf="!category.children" (click)="navigateToComponentDashboardDetail(category.id)">{{category.name}}</span>
+                      </div>
+                      <svg style="margin-left: 5px; position: relative;" width="1em" height="1em" viewBox="0 0 16 16"
+                           class="bi bi-chevron-right" fill="#999999"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                      </svg>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="default-catalog-menu">
+            <!--            <button class="btn mobile-menu-btn" (click)="mobileMenuClose()">Close</button>-->
+            <ul id="dropdown-menu" class="dropdown-menu w-100" role="menu" aria-labelledby="dropdownMenu"
+                (click)="mobileMenuClose()">
+              <li *ngFor="let category of sortedCategories; let j = index;" class="dropdown-item dropdown-submenu cursorP">
+                <div class="d-flex align-items-center">
+                  <div style="width: 100%;" class="nav-link">
+                    <a class="nav-link" tabindex="-1" (click)="navigateToComponent(category.id)">{{category.name}}</a>
+                  </div>
+                  <svg style="margin-left: 5px;" width="1em" height="1em" viewBox="0 0 16 16"
+                       class="bi bi-chevron-right" fill="#999999"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <ul class="dropdown-menu small-dropdown-menu" [ngStyle]="{'top': j*-100+'%'}" style="height: 1058%">
+                  <div class="d-flex flex-wrap">
+                    <li *ngFor="let childCategory of category.children; let i = index"
+                        class="dropdown-item inner-dropdown-item">
+                      <div>
+                        <a class="nav-link" (click)="navigateToComponentDashboard(childCategory.id)"
+                           style="font-weight: 500;">{{childCategory.name}}</a>
+
+                        <ul>
+                          <li class=" dropdown-item" style="padding: 0; font-size: 14px; border: 0"
+                              *ngFor="let childSubCategory of childCategory.children; let index = index">
+                            <a class="nav-link"
+                               (click)="navigateToComponentDashboardDetail(childSubCategory.id)">{{childSubCategory.name}}</a>
+                          </li>
+<!--                          <a *ngIf="childCategory.children.length > 3" class="nav-link" [routerLink]="['../dashboard/',childCategory.id]"-->
+<!--                             style="color: #4D93ED; font-size: 14px; padding: 0; margin: 0">Подробнее...</a>-->
+                        </ul>
+                      </div>
+                    </li>
+                  </div>
+                  <br>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-9 col-md-8 col-lg-7 d-flex align-items-center">
+        <input
+          type="text"
+          class="search"
+          data-toggle="dropdown" id="dropdownMenuSearch"
+          (keyup)="updateSearchTerm(searchTerm.value)"
+          placeholder="Я ХОЧУ НАЙТИ ..."
+          #searchTerm
+        />
+        <div class="col-12 dropdown-menu" style="padding: 0!important;">
+          <div class="list-group d-flex" *ngFor="let product of searchProducts">
+            <a *ngIf="product.id !== ''" class="list-group-item list-group-item-action" (click)="searchItem(product.id)">{{product.name}}</a>
+            <a *ngIf="product.id === ''" class="list-group-item list-group-item-action">{{product.name}}</a>
+          </div>
+        </div>
+      </div>
+      <button class="status-application-btn btn float-right ml-2"
+              data-toggle="modal" data-target="#statusModal" style="color: white;background-color: #E7AB3C; font-size: 1rem">
+        Статус заказа
+      </button>
+    </div>
+  </div>
+</div>
+<div id="catalog-background" class="catalog-background background-non-active" (click)="mobileMenuClose()">
+  <button type="button" class="btn mobile-menu-btn" aria-label="Close" (click)="mobileMenuClose()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal fade" id="statusModal" tabindex="-1"
+     aria-labelledby="statusModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-width: 620px!important;">
+    <div class="modal-content">
+      <div class="container">
+        <form class="status-form mt-3 pb-2" [formGroup]="contactForm" (ngSubmit)="getApplicationsByPhoneNumber()">
+        <div class="form-group">
+          <label for="applicationStatus">Введите номер телефона</label>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <input formControlName="contactNumber" type="tel" class="form-control" id="applicationStatus" value="+7 7"
+          aria-describedby="telHelp" required>
+          <span class="error" *ngIf="phoneNumberValidation.invalid && phoneNumberValidation.touched">
+                  *Номер телефона введен неверно
+                    +7 7•• ••• - •• - ••
+                </span>
+        </div>
+        <button type="submit" class="btn" style="color: white;background-color: #E7AB3C">Подтвердить</button>
+        </form>
+      </div>
+<!-- //////////////////////////////////////////////////////////////////////-->
+
+      <div *ngIf="productApplications" class="container">
+        <div class="row" *ngFor="let application of productApplications; let i = index">
+          <div class="col-md-12">
+            <div class="row p-2 bg-white border my-2">
+              <div class="col-md-3 mt-1">
+                <img *ngIf="application.product.images.length!=0"
+                     [src]="'data:image/png;base64,' + application.product.images[0].data"
+                     class="img-fluid img-responsive rounded product-image">
+                <img *ngIf="application.product.images && application.product.images.length == 0"
+                src="/assets/no-image-1.jpg">
+              </div>
+              <div class="col-md-6 mt-1">
+                <h5>{{application.product.name}}</h5>
+
+                <div class="mt-1 mb-1 spec-1"><span>Статус: {{application.status === 'NEW' ? 'В ожидании звонка':application.status === 'IN_PROGRESS' ? 'В процессе' : application.status === 'DONE' ? 'Готов к выдаче': application.status === 'REJECTED' ? 'Отказано':'/'}}<br></span></div>
+                <div class="mt-1 mb-1 spec-1"><span>Заказан: {{timestamptToDate(application)}}<br></span></div>
+                <p class="text-justify text-truncate para mb-1">{{application.product.description}}<br></p>
+                <button (click)="redirectToProduct(application.product.id)" class="btn" data-dismiss="modal" style="color: white;background-color: #E7AB3C">Перейти к продукту</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="productApplications && productApplications.length === 0" class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row p-2 bg-white border my-2">
+              <div class="col-md-12 mt-1">
+                <h6>К сожалению вы ввели не правильный номер или заказа с таким номером не существует</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- //////////////////////////////////////////////////////////////////////-->
+
+    </div>
+  </div>
+</div>

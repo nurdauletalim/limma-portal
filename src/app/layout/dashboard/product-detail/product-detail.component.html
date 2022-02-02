@@ -1,0 +1,472 @@
+<div *ngIf="currentProduct && parentCategory" class="container">
+
+  <!--  Modal window Product application-->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 620px!important;">
+      <div class="modal-content">
+
+        <div class="container" *ngIf="productToApply">
+
+          <div class="row d-flex justify-content-center align-items-center">
+            <div style="width: 100%" class="form d-flex justify-content-between custom-form">
+              <div class="image" *ngIf="productToApply.images">
+                <img *ngIf="productToApply.images.length!=0"
+                     [src]="'data:image/png;base64,' + productToApply.images[0].data">
+              </div>
+              <form class="my-form" [formGroup]="applicationForm" (ngSubmit)="createApplication($event)">
+                <h4 class="font-weight-bold mb-3">{{productToApply.name}}, {{showPriceWithSpace(productToApply.price)}}
+                  <sup>тнг</sup></h4>
+                <p class="mdb-color-text">Для того чтобы отправить заявку заполните ее.</p>
+
+                <div class="md-form md-outline custom-input">
+                  <label for="name">Имя<span style="color:red;">*</span></label>
+                  <input id="name" name="name" formControlName="clientName" class="form-control"
+                         [ngClass]="{'form-submitted': formSubmitted}">
+                  <span class="error" *ngIf="name.invalid && name.touched">
+                  *Имя не введено или введено неверно
+                </span>
+                </div>
+                <br>
+
+                <div class="md-form md-outline custom-input">
+                  <label for="contact">Телефон номер<span style="color:red;">*</span></label>
+                  <input id="contact" formControlName="clientContact" class="form-control"
+                         placeholder="+7 7•• ••• - •• - ••"
+                         [ngClass]="{'form-submitted': formSubmitted}">
+                  <span class="error" *ngIf="contact.invalid && contact.touched">
+                  *Номер телефона не введено или введено неверно
+                    +7 7•• ••• - •• - ••
+                </span>
+                </div>
+                <br>
+
+                <div class="md-form md-outline custom-input">
+                  <label for="email">Электронная почта</label>
+                  <input type="email" id="email" formControlName="clientEmail" class="form-control"
+                         [ngClass]="{'form-submitted': formSubmitted}">
+                  <span class="error" *ngIf="email.invalid && email.touched">
+                  *Электронная почта введена неверно
+                </span>
+                </div>
+                <br>
+                <div class="space">
+                  <div class="float-left">
+                    <p>
+                      <span style="color:red;">*</span>Не отправляйте деньги продавцу, пока не убедитесь в соответствии товара или не получите на руки.
+                    </p>
+                  </div>
+                  <div class="float-right">
+                    <button id="btn" style=" border-radius: 50px; color: #fff;" class="btn btn-rounded" type="submit">
+                      Отправить
+                    </button>
+                    <button style="display: none" hidden id="openSuccessfulWindow" data-toggle="modal"
+                            data-target="#successfulApplication">
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="rejectOrder" tabindex="-1" aria-labelledby="rejectOrderLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 620px!important;">
+      <div class="modal-content">
+
+
+        <div class="container" *ngIf="productToApply">
+
+          <div class="row d-flex justify-content-center align-items-center">
+            <div style="width: 100%" class="form d-flex justify-content-between custom-form">
+              <div class="image" *ngIf="productToApply.images">
+                <img *ngIf="productToApply.images.length!=0"
+                     [src]="'data:image/png;base64,' + productToApply.images[0].data">
+              </div>
+              <form class="my-form" [formGroup]="applicationForm" (ngSubmit)="rejectApplication($event)">
+                <h4 class="font-weight-bold mb-3">{{productToApply.name}}, {{showPriceWithSpace(productToApply.price)}}
+                  <sup>тнг</sup></h4>
+                <p class="mdb-color-text">Для того чтобы отменить заявку заполните форму.</p>
+
+                <div class="md-form md-outline custom-input">
+                  <label for="namereject">Имя<span style="color:red;">*</span></label>
+                  <input id="namereject" name="name" formControlName="clientName" class="form-control"
+                         [ngClass]="{'form-submitted': formSubmitted}">
+                  <span class="error" *ngIf="name.invalid && name.touched">
+                  *Имя не введено или введено неверно
+                </span>
+                </div>
+                <br>
+
+                <div class="md-form md-outline custom-input">
+                  <label for="contactreject">Телефон номер<span style="color:red;">*</span></label>
+                  <input id="contactreject" formControlName="clientContact" class="form-control"
+                         placeholder="+7 7•• ••• - •• - ••"
+                         [ngClass]="{'form-submitted': formSubmitted}">
+                  <span class="error" *ngIf="contact.invalid && contact.touched">
+                  *Номер телефона не введено или введено неверно
+                    +7 7•• ••• - •• - ••
+                </span>
+                </div>
+                <div class="md-form md-outline custom-input">
+                  <span class="error" *ngIf="!correctApplicationForDelete">
+                  *Неправильное имя или контакт
+                </span>
+                </div>
+                <br>
+                <div class="space">
+                  <div class="float-right">
+                    <button id="btn" style=" border-radius: 50px; color: #fff;" class="btn btn-rounded" type="submit">
+                      Отменить заказ
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Path History at the top-->
+  <div class="row">
+    <div class="col-12 page__history">
+      <span style="margin: 0; padding: 0;" *ngFor="let category of tree; index as i; last as isLast" class="hover-link">
+        <span [routerLink]="[category.path]">{{category.name}}</span><span class="page__history__last"
+                                                                           style="margin-left: 3px"> /</span>
+        <ng-container *ngIf="isLast">
+          <span class="hover-link-last-default">
+            {{currentProduct.name}}
+          </span>
+          <p [routerLink]="[category.path]" class="hover-link-last">
+            <svg style="margin-bottom: 3px" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-left"
+                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            {{currentProduct.name}}
+          </p>
+        </ng-container>
+
+      </span>
+    </div>
+  </div>
+
+  <!--Model Detail-->
+  <div *ngIf="currentProduct" class="row block-margin bg-block">
+    <div class="col-lg-2 col-md-3 col-sm-6 col-8 center-block">
+      <div class="item__image">
+        <img *ngIf="currentProduct.model.images && currentProduct.model.images.length != 0"
+             [src]="'data:image/png;base64,' + currentProduct.model.images[0].data" alt="">
+        <img *ngIf="currentProduct.model.images && currentProduct.model.images.length == 0
+        && currentProduct.images && currentProduct.images.length!=0"
+             [src]="'data:image/png;base64,' + currentProduct.images[0].data" alt="">
+        <img *ngIf="currentProduct.model.images && currentProduct.model.images.length == 0 && currentProduct.images && currentProduct.images.length == 0" src="/assets/no-image-1.jpg" alt="">
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-9">
+      <div class="item__name">{{currentProduct.name}}</div>
+      <strong *ngIf="currentProduct.state.toString() === 'BOOKED'" class="float-left">Забронирован</strong>
+      <strong *ngIf="currentProduct.state.toString() === 'SOLD'" class="float-left">Продан</strong>
+      <br *ngIf="currentProduct.state.toString() === 'BOOKED'">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 item__content">
+          <div class="item__offers" *ngIf="currentProduct.products">
+            <span class="item__offers__count"></span>
+            <span class="item__price">
+            от {{showPriceWithSpace(currentProduct.products[0].price)}} тг
+            </span>
+          </div>
+          <hr>
+          <p *ngIf="currentProduct.model && currentProduct.model.description">{{currentProduct.model.description}}
+          </p>
+        </div>
+        <div class="col-lg-6 col-md-12" *ngIf="currentProduct.properties">
+          <div class="item__details small-part" *ngFor="let row of currentProduct.keys">
+            <div *ngIf="currentProduct.properties[row.key] && currentProduct.properties[row.key].value" class="row">
+              <div class="col-6 item__details__field">{{propertiesToDisplay[row.key]}}</div>
+              <div class="col-6 item__details__value no-wrap">
+                {{currentProduct.properties[row.key].value}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Model Description-->
+    <!--    <div class="row" style="width: 100%; padding: 0 20px;">-->
+    <!--      <div class="col-lg-12 col-sm-12">-->
+    <!--        <div class="item__about">-->
+    <!--          <div class="item__title bold">О товаре</div>-->
+    <!--          <p *ngIf="currentProduct.model && currentProduct.model.description">{{currentProduct.model.description}}-->
+    <!--          </p>-->
+    <!--          <p *ngIf="!currentProduct.model || !currentProduct.model.description">{{currentProduct.description}}-->
+    <!--          </p>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <!--Filter Bar of products-->
+    <nav class="filter-bar navbar navbar-expand-lg navbar-light bg-block">
+      <div class="collapse navbar-collapse justify-content-start">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <button [className]="conditionNew?'btn filter-orange-btn':'btn filter-blue-btn'"
+                    [style]="conditionNew?'background-color: rgba(227,175,15,0.15);':'border-color: #163C9C'"
+                    (click)="filterProducts('condition','new',value,highValue)">
+              Новое
+            </button>
+          </li>
+          <li class="nav-item">
+            <button [className]="conditionGood?'btn filter-orange-btn':'btn filter-blue-btn'"
+                    [style]="conditionGood?'background-color: rgba(227,175,15,0.15);':'border-color: #163C9C'"
+                    (click)="filterProducts('condition','good',value,highValue)">
+              Хорошое
+            </button>
+          </li>
+          <li class="nav-item">
+            <button [className]="conditionUsed?'btn filter-orange-btn':'btn filter-blue-btn'"
+                    [style]="conditionUsed?'background-color: rgba(227,175,15,0.15);':'border-color: #163C9C'"
+                    (click)="filterProducts('condition','used',value,highValue)">
+              Удовлетворительное
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <!--        Price        -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              Цена
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div class="dropdown-item price-bar" style="background-color: transparent">
+                <form>
+                  <div class="column">
+                    <ng5-slider id="priceSlider" (userChange)="filterProducts('','',value,highValue)"
+                                [(value)]="value"
+                                [options]="options" [(highValue)]="highValue"></ng5-slider>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </li>
+
+          <!--            <li class="nav-item dropdown">-->
+          <!--              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"-->
+          <!--                 aria-haspopup="true" aria-expanded="false">-->
+          <!--                Комплектация-->
+          <!--              </a>-->
+          <!--              <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+          <!--                <div class="dropdown-item with-checkbox" *ngFor="let equipment of equipmentList">-->
+          <!--                  <input class="form-check-input" [defaultChecked]="false"-->
+          <!--                         (click)="addFilter(equipment.name,equipmentFilter)"-->
+          <!--                         type="checkbox">-->
+          <!--                  <label class="form-check-label">-->
+          <!--                    {{equipment.name}}-->
+          <!--                  </label>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </li>-->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              По состоянию
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div class="dropdown-item" *ngFor="let condition of conditionList">
+                <!--              <input class="form-check-input" [defaultChecked]="false" (click)="addFilter(condition.name,equipmentFilter)"-->
+                <!--              type="checkbox">-->
+                <label class="form-check-label" (click)="filterProducts('filter',condition.name)">
+                  {{condition.name}}
+                </label>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <button class="btn btn-outline-success my-2 my-sm-0" (click)="loadCurrentProductFiltered()">Сбросить</button>
+        </form>
+      </div>
+    </nav>
+
+    <div class="col-12" *ngFor="let similarPhone of currentProductFiltered.products; let y = index"
+         style="align-content: center;align-items: center">
+      <div class="modal fade" id="successfulApplication" tabindex="-1" role="dialog"
+           aria-labelledby="successfulApplicationLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="successfulApplicationLabel">Заказ успешно сделан</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img src="/assets/successful.png" alt="" style="width: 10%">
+              <p>Ваш заказ принят</p>
+              <p>Вы можете проверить свои заказы через ваш номер телефона</p>
+              <p>В ближайшее время с вами свяжутся</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="redirectToPreviousPage()">Закрыть</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade modal-body" id="productImagesModel{{y}}" tabindex="-1"
+           role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" style="background-color: #2C3034">
+            <div id="carouselExampleControls{{y}}"
+                 class="carousel slide">
+              <div class="modal-header" style="background-color: transparent">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" style="color: white">&times;</span>
+                </button>
+              </div>
+              <div class="carousel-inner">
+                <div *ngFor="let image of similarPhone.images; let i = index"
+                     [className]="image.state===1?'carousel-item active':'carousel-item'">
+                  <div class="carousel-img modal-img">
+                    <img [src]="'data:image/png;base64,' + image.data" alt="" class="d-block">
+                  </div>
+                </div>
+                <a class="carousel-control-next" type="button"  (click)="changeStateOfNext(similarPhone.images)"
+                   data-slide="next"
+                   style="border-radius: 4px;
+    border: 1px solid rgb(242, 244, 245); top: 45%;bottom: 45%; margin: auto;right: 5%;height: 34px;width: 32px;background-color: #F2F4F5">
+                  <img src="assets/arrow-icon-next.png" alt="" height="25">
+                </a>
+                <a class="carousel-control-prev" type="button" (click)="changeStateOfPrev(similarPhone.images)"
+                   data-slide="prev"
+                   style="border-radius: 4px;
+    border: 1px solid rgb(242, 244, 245); top: 45%;bottom: 45%; margin: auto;left: 5%;height: 34px;width: 32px;background-color: #F2F4F5">
+                  <img src="assets/arrow-icon-prev.png" alt="" height="25">
+                </a>
+              </div>
+
+              <div class="d-flex justify-content-center mt-4">
+                <div *ngFor="let image of similarPhone.images; let i = index" class="mx-3">
+                  <img [src]="'data:image/png;base64,' + image.data" style="width: 100px; height: 100px"
+                       [className]="image.state===1?'selected-image': ''"
+                       (click)="changeState(image, similarPhone.images)">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 long__catalog__item">
+        <div class="row long-card-custom bg-block">
+          <div class="col-lg-2 col-md-12 long-card-left text-center bg-block">
+            <div class="long-card-img" *ngIf="similarPhone.images">
+              <carousel *ngIf="similarPhone.images"
+                        [cellWidth]="'100%'"
+                        [cellsToShow]="1"
+                        [autoplay]="false"
+                        [dots]="true"
+                        [loop]="true"
+                        [arrowsTheme]="'light'"
+                        style="z-index: 1;"
+                        class="custom-carousel">
+                <div class="carousel-cell" *ngFor="let image of similarPhone.images; let i = index">
+                  <img *ngIf="image"
+                       [src]="'data:image/png;base64,' + image.data" alt="" data-toggle="modal"
+                       [attr.data-target]="'#productImagesModel' + y" (click)="setState(similarPhone)">
+                  <div class="centered left" style="position:absolute; top: 1px;right: 6px">
+
+                    <small>{{i + 1}}/{{similarPhone.images.length}}</small></div>
+                </div>
+              </carousel>
+            </div>
+
+          </div>
+          <div class="col-lg-9 col-md-12 long-card-right">
+            <div class="row">
+              <div class="col-xl-5 col-lg-5 col-md-12">
+                <div class="long-card-condition"></div>
+                <div class="d-flex flex-row long-card-header">
+                  <div class="card-title"><p style="color: #163C9C; margin-bottom: 0">{{similarPhone.name}}</p>
+                    <p class="item__subscription" style="float: left;margin-bottom: 0px">
+                      <small *ngIf="similarPhone.state.toString() === 'BOOKED'" class="float-left">Забронирован</small>
+                      <br *ngIf="currentProduct.state.toString() === 'BOOKED'">
+                      <span
+                        class="float-left"
+                        style="color: black; font-size: 110%;"><b>Состояние:</b> {{similarPhone.condition  ? similarPhone.condition : '//'}}
+                      </span>
+                      <br>
+                      <span *ngIf="productOrganization"
+                            style="color: black;font-size: 110%;"><b>Организация:</b> {{productOrganizationMap.get(similarPhone.id)}}
+                      </span>
+
+                    </p>
+                  </div>
+                </div>
+                <div class="long-card-desc"><b>Описание:</b>
+                  <p style="font-size: 14px">{{similarPhone.description}}</p>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-3 col-md-6">
+                <div class="long-card-price"><p style="font-size: 80%;">{{showPriceWithSpace(similarPhone.price)}}тг</p>
+                </div>
+                <div *ngIf="similarPhone.properties">
+                  <div class="item__details small-part" *ngFor="let row of similarPhone.keys">
+                    <div
+                      *ngIf="similarPhone.properties[row.key] && similarPhone.properties[row.key].value && similarPhone.properties[row.key].value.length > 0"
+                      class="row">
+                      <div class="col-4 item__details__field">{{propertiesToDisplay[row.key]}}</div>
+                      <div class="col-8 item__details__value no-wrap">
+                        {{similarPhone.properties[row.key].value}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--                <div *ngIf="productOrganization" class="pt-4 "><p-->
+                <!--                  class="text-secondary"></p>{{productOrganizationMap.get(similarPhone.id)}}</div>-->
+<!--                <div *ngIf="productOrganization" class="pt-4 "><p-->
+<!--                  class="text-secondary"></p>{{productOrganization.name}}</div>-->
+              </div>
+              <div class="col-xl-3 col-lg-4 col-md-12 long-card-btn-parent">
+                <button *ngIf="currentProduct.state.toString() === 'ACTIVE'"
+                        class="long-card-order long-card-btn b-btn--pink"
+                        (click)="setProductIdToApplication(similarPhone.id)"
+                        data-toggle="modal" data-target="#exampleModal">
+                  <span>Забронировать</span>
+                </button>
+                <button *ngIf="currentProduct.state.toString() === 'BOOKED'"
+                        class="long-card-order long-card-btn b-btn--pink"
+                        (click)="setProductIdToApplication(similarPhone.id)"
+                        data-toggle="modal" data-target="#rejectOrder">
+                  <span>Отменить заказ</span>
+                </button>
+                <div style="color: #999999;font-size: 80%;top: 80%;position: absolute">
+                      Дата добавления: {{similarPhone.publishedDate | date:"dd.MM.yyyy" }}
+                    </div>
+
+                <!--                <button class="long-card-more long-card-btn"-->
+                <!--                        (click)="redirectToSimilarProduct(similarPhone.id)">-->
+                <!--                  <span>Подробнее</span>-->
+                <!--                </button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
